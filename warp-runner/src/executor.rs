@@ -56,8 +56,10 @@ fn do_execute(target: &Path, args: &[String]) -> io::Result<i32> {
     if is_script(target) {
         let mut cmd_args = Vec::with_capacity(args.len() + 2);
         cmd_args.push("/c".to_string());
-        cmd_args.push(target_str.to_string());
-        cmd_args.extend_from_slice(&args);
+        cmd_args.push(format!("\"{}\"", target_str));
+        for arg in args {
+            cmd_args.push(format!("\"{}\"", arg));
+        }
 
         Ok(Command::new("cmd")
             .args(cmd_args)
